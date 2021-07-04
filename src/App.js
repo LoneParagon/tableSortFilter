@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import './App.css'
 import {tableData} from "./faker";
 import _  from "lodash";
+import TextField from '@material-ui/core/TextField';
 
 // Колонки таблицы
 const tableColumns = {
@@ -21,10 +22,7 @@ class TableMain extends Component {
         originalResults: [],
         displayResults: [],
         sortBy: null,
-        sortAsc: true,
-        filterBy: [],
-        filterTypes: [],
-        filterProps: []
+        sortAsc: true
     };
 
     componentDidMount() {
@@ -98,25 +96,74 @@ class TableMain extends Component {
         });
     };
 
+    resizeColumn = (resizer) => {
+        let x = 0;
+        let w = 0;
+
+        const mouseDownHandler = function(e) {
+            // Get the current mouse position
+            x = e.clientX;
+
+            // Calculate the current width of column
+            const styles = window.getComputedStyle(resizer.target.parentElement);
+            w = parseInt(styles.width, 10);
+
+            // Attach listeners for document's events
+            document.addEventListener('mousemove', mouseMoveHandler);
+            document.addEventListener('mouseup', mouseUpHandler);
+        };
+
+        const mouseMoveHandler = function(e) {
+            // Determine how far the mouse has been moved
+            const dx = e.clientX - x;
+
+            // Update the width of column
+            resizer.target.parentElement.firstChild.style.width = `${w + dx}px`;
+        };
+
+        // When user releases the mouse, remove the existing event listeners
+        const mouseUpHandler = function() {
+            document.removeEventListener('mousemove', mouseMoveHandler);
+            document.removeEventListener('mouseup', mouseUpHandler);
+        };
+
+        resizer.target.addEventListener('mousedown', mouseDownHandler);
+    }
+
+    Column = () => {
+        let tableColumns = []
+
+        tableData.forEach(el=>{
+            Object.keys(el).forEach((e)=>{
+                tableColumns.push(e)
+            })
+        })
+
+        tableColumns = tableColumns.filter((v, i, a) => a.indexOf(v) === i);
+
+        return tableColumns.map((e)=>{
+            return (
+                <>
+                    <th id={e} className="table-columns col-2">
+                        <div className="table-headtext" >
+                            <p id={e} onClick={this.sortResults} className="text-nowrap">{e}</p>
+                            <p className="triangle">{this.state.sortBy===e? this.state.sortAsc === true ? ' ▼':' ▲' : ' ◀'}</p>
+                        </div>
+                        <TextField size='small' id={e} onChange={this.onChange} type="text" />
+                        <span className="resizer" onMouseOver={this.resizeColumn} />
+                    </th>
+                </>
+            )})
+    }
+
     render() {
         return (
             <div>
                 <div className="row">
-                    <table className="table table-hover" style={{ width: "100%" }}>
+                    <table id="resizeMe" className="table table-hover" style={{ width: "100%" }}>
                         <thead className="table-head border-top table-secondary">
                         <tr>
-                            {Object.entries(tableColumns).map((e) => {
-                                return (
-                                    <th id={e[0]} className="table-columns col-2">
-                                        <div className="table-headtext">
-                                            <p id={e[0]} onClick={this.sortResults} className="text-nowrap">{e[1]}</p>
-                                            <p className="triangle">{this.state.sortBy===e[0]? this.state.sortAsc === true ? ' 🢗':' 🢕' : ' 🢔'}</p>
-                                        </div>
-                                        <input  id={e[0]} label="Search" onChange={this.onChange} type="text" className="form-control" />
-                                        <span className="vl"/>
-                                    </th>
-                                )
-                            })}
+                            {this.Column()}
                         </tr>
                         </thead>
                         <tbody>

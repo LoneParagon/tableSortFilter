@@ -26,13 +26,7 @@
   max-height: 50px;
 }
 
-.vl {
-  border-left: 2px solid lightgrey;
-  height: 55px;
-  position: absolute;
-  right: 0%;
-  top: 10%;
-}
+
 
 button {
   position: absolute;
@@ -89,4 +83,22 @@ input {
 p {
   margin-block-start: 0;
   margin-block-end: 0;
+}
+
+.table th {
+  position: relative;
+}
+
+.resizer {
+  border-left: 2px solid lightgrey;
+  height: 80%;
+  position: absolute;
+  right: 0%;
+  top: 10%;
+  cursor: col-resize;
+  user-select: none;
+}
+
+.resizer:hover {
+  border-left: 3px solid grey;
 }

@@ -5,16 +5,16 @@ import _  from "lodash";
 import TextField from '@material-ui/core/TextField';
 
 // Колонки таблицы
-const tableColumns = {
-    visitDate: 'Дата и время визита',
-    activityLevel: 'Активность',
-    activityTime: 'Время на сайте',
-    visitCount: 'Просмотры',
-    searchPhrase: 'Фраза',
-    gender: 'Пол',
-    address: 'Почтовый индекс',
-    country: 'Страна'
-}
+// const tableColumns = {
+//     visitDate: 'Дата и время визита',
+//     activityLevel: 'Активность',
+//     activityTime: 'Время на сайте',
+//     visitCount: 'Просмотры',
+//     searchPhrase: 'Фраза',
+//     gender: 'Пол',
+//     address: 'Почтовый индекс',
+//     country: 'Страна'
+// }
 
 // Генерация таблицы
 class TableMain extends Component {
